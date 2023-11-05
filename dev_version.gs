@@ -132,11 +132,12 @@ os.rshell_suite=function()
         get_shell.host_computer.touch(home_dir,"rshell.bat")
         bat=get_shell.host_computer.File(home_dir+"/rshell.bat")
         if not bat then exit(color.red+"ERR:FCN:rshell_sute"+char(10)+"SUBFCN:rshell_bat"+char(10)+"RCN failed to find batch file")
-        bat.set_content("meta=include_lib(home_dir+""/metaxploit.so"")"+char(10)+"meta.rshell_client("""+user_input("RSHELL SERVER IP:")+""",1222"+",""rootkit"")")
+        bat.set_content("meta=include_lib(home_dir+""/metaxploit.so"")"+char(10)+"meta.rshell_client("""+user_input("RSHELL SERVER IP:")+""""+","+user_input("Port Rshell Service is running on default(1222)")+","+""""+user_input("Process Name:")+""")")
         get_shell.build(bat.path,home_dir)
     end function
     rshell_interface=function()
         meta=os.meta
+        print("Listening for connections...")
         shells=[]
         while shells.len==0
             shells=meta.rshell_server
@@ -187,7 +188,6 @@ os.rshell_suite=function()
         clear_screen
         start_server
     else if op=="2" then
-        clear_screen
         rshell_bat
     else if op=="3" then
         clear_screen
