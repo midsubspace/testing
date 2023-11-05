@@ -1,4 +1,5 @@
-/mission_finder.gs
-/remote_log_clearer_testing_phase
-/show_process.gs
-/website_switcher.gs
+dev_version.gs
+mission_finder.gs
+remote_log_clearer_testing_phase
+show_process.gs
+website_switcher.gs
