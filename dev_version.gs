@@ -124,9 +124,24 @@ os.rshell_suite=function()
             exit("Exiting Program!")
         end if
     end function
-
+    rshell_bat=function()
+        print("Getting ready to make batch file at:"+home_dir+"/rshell.bat")
+        get_shell.host_computer.touch(home_dir,"rshell.bat")
+        bat=get_shell.host_computer.File(home_dir+"/rshell.bat")
+        if not bat then exit(color.red+"ERR:FCN:rshell_sute"+char(10)+"SUBFCN:rshell_bat"+char(10)+"RCN failed to find batch file")
+        bat.set_content("meta=include_lib(home_dir+""/metaxploit.so"")"+char(10)+"meta.rshell_client("""+user_input("RSHELL SERVER IP:")+""",1222"+",""rootkit"")")
+        get_shell.build(bat.path,home_dir)
+    end function
     print(color.red+"1) Install Rshell Service on "+get_router.public_ip)
-    if user_input("RSHELL_SUITE>")=="1" then start_server
+    print "2) Build Rshell Kit"
+    op=user_input("RSHELL_SUITE>")
+    if op=="1" then 
+        start_server
+    else if op=="2" then 
+        rshell_bat
+    else
+        print("Exiting Reverse Shell Suite...");wait 2
+    end if
 end function
 os.edit_settings=function()
 	setting_folder=os.settings_folder
