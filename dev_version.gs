@@ -9,6 +9,7 @@ os.mail_box=mail_login("test@tiefel.net","test")
 temp = {}
 metalibs={}//metalibs[num][0]==metalib_path,metalibs[num][1]=version
 cryptolibs={}
+rshell_libs={}
 os.discord="https://discord.com/invite/zZeJQvJahR"
 os.github="https://github.com/midsubspace/WeaponG"
 os.bypass = 0
@@ -43,7 +44,11 @@ os.setup = function()
 		os.crypto = include_lib(os.find("crypto",0))
 	end if
 	os.computer.create_folder(home_dir, ".os")
-	os.data_storage = os.computer.File(home_dir + "/.os")
+	if os.user=="root" then 
+        os.data_storage = os.computer.File(os.find(".os"))
+    else
+        os.data_storage=os.computer.File(home_dir+"/.os")
+    end if
 	os.data_storage_path = os.data_storage.path
 	os.computer.create_folder(os.data_storage_path,"settings")
 	os.settings_folder=os.computer.File(os.data_storage_path+"/settings")
@@ -102,7 +107,25 @@ end function
 
 os.rshell_suite=function()
     clear_screen
-    print "Loading Reverse Shell Suite....";wait 3
+    print "Loading Reverse Shell Suite....";wait 2
+    start_server=function()
+        os.hackshop_software()
+        if active_user!="root" then exit("Only"+color.red+" Root"+color.cap+" Can Start An Rshell Service!")
+        clear_screen
+        rshell_lib=null
+        if rshell_lib == null and os.find("librshell",1)==true then
+            rshell_lib = include_lib(os.find("librshell",0))
+        end if
+        if user_input("You are about to install the rshell service on IP:"+get_router.public_ip+"(yes or no)").lower=="yes" then
+            output=rshell_lib.install_service
+            if output!=true then exit(output)
+            print("<b> Type 'Browser.exe " +get_router.local_ip+":8080 to access the router config and make sure the the service is accesible</b>")
+        else
+            exit("Exiting Program!")
+        end if
+    end function
+
+    if user_input("RSHELL_SUITE>")=="1" then start_server
 end function
 os.edit_settings=function()
 	setting_folder=os.settings_folder
@@ -307,7 +330,7 @@ os.find=function(term,mode)
 	found_folders=[]
 	search_files=function(folder,term)
 		for file in folder.get_files
-			if term=="crypto" or term=="metaxploit" then
+			if term=="crypto" or term=="metaxploit" or term=="librshell" then
 				if file.path.split("/").pop.split("\.")[0]==term then
 					found_files.push(file.path)
 				end if
@@ -330,7 +353,7 @@ os.find=function(term,mode)
 
 
 	search_folders(get_shell.host_computer.File("/"),term)
-	if (mode==1 and (term=="metaxploit" or term=="crypto")) then
+	if (mode==1 and (term=="metaxploit" or term=="crypto" or term=="librshell")) then
 		if  found_files.len!=0 then
 			return(true)
 		else
@@ -380,7 +403,31 @@ os.find=function(term,mode)
 			end if
 		end for
 		return(winner)
-	else
+	else if term=="crypto" then
+		return(found_files[0])
+	end if
+    if term=="librshell" and typeof(os.meta)=="MetaxploitLib" then
+		for file in found_files
+			if rshell_libs.indexOf(file)==null then
+				rshell_path=file
+				rshell=include_lib(file)
+				version=os.meta.load(file).version
+				rshell_libs[file]=version
+			end if
+		end for
+		for rshell in rshell_libs
+			rshell_libs[rshell.key]=rshell.value.replace("\.", "").to_int
+		end for
+		highest=""
+		vote=0
+		for item in rshell_libs
+			if item.value>vote then
+				vote=item.value
+				winner=item.key
+			end if
+		end for
+		return(winner)
+	else if term=="librshell" then
 		return(found_files[0])
 	end if
 	if found_folders.len!=0 then
@@ -391,7 +438,7 @@ os.find=function(term,mode)
 				num=num+1
 			end for
 			choice=user_input("Pick a folder location to use:").to_int
-			return(found_folders[option-1])
+			return(found_folders[choice-1])
 		else
 			return(found_folders[0])
 		end if
@@ -420,7 +467,7 @@ os.hackshop_software = function()
 	aptlib.add_repo(os.hackshop)
 	aptlib.update
 	computer = os.computer
-	package_list = ["metaxploit.so", "crypto.so"]
+	package_list = ["metaxploit.so", "crypto.so","librshell.so"]
 	for package in package_list
 		computer.create_folder(os.data_storage.path, "lib")
 		lib_folder = os.data_storage.path + "/lib"
