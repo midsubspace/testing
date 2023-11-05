@@ -109,6 +109,7 @@ os.rshell_suite=function()
     clear_screen
     print "Loading Reverse Shell Suite....";wait 2
     start_server=function()
+        if os.hackshop==null then os.hackshop=user_input("Hackshop IP:")
         os.hackshop_software()
         if active_user!="root" then exit("Only"+color.red+" Root"+color.cap+" Can Start An Rshell Service!")
         clear_screen
