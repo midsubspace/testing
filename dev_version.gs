@@ -118,6 +118,8 @@ os.rshell_suite=function()
             rshell_lib = include_lib(os.find("librshell",0))
         end if
         if user_input("You are about to install the rshell service on IP:"+get_router.public_ip+"(yes or no)").lower=="yes" then
+            get_shell.launch("/bin/apt-get","update")
+            get_shell.launch("/bin/apt-get","install librshell.so")
             output=rshell_lib.install_service
             if output!=true then exit(output)
             print("<b> Type 'Browser.exe " +get_router.local_ip+":8080 to access the router config and make sure the the service is accesible</b>")
