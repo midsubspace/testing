@@ -125,6 +125,7 @@ os.rshell_suite=function()
         end if
     end function
 
+    print(color.red+"1) Install Rshell Service on "+get_router.public_ip)
     if user_input("RSHELL_SUITE>")=="1" then start_server
 end function
 os.edit_settings=function()
