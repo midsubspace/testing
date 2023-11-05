@@ -135,13 +135,63 @@ os.rshell_suite=function()
         bat.set_content("meta=include_lib(home_dir+""/metaxploit.so"")"+char(10)+"meta.rshell_client("""+user_input("RSHELL SERVER IP:")+""",1222"+",""rootkit"")")
         get_shell.build(bat.path,home_dir)
     end function
+    rshell_interface=function()
+        meta=os.meta
+        shells=[]
+        while shells.len==0
+            shells=meta.rshell_server
+            if typeof(shells)=="string" then exit(shells)
+            if shells.len==0 then wait 2
+        end while
+        option=0
+        while typeof(option)!="number" or (option<1 or option>shells.len)
+            print(shells.len+" shell(s) connected!"+char(10)+"<b>Select a shell to start a terminal:</b>")
+            for i in range(0,shells.len-1)
+                print(char(10)+"<b>Shell("+(i+1)+")</b>"+char(10)+"Public IP:"+shells[i].host_computer.public_ip+char(10)+"Local IP:"+shells[i].host_computer.local_ip)
+            end for
+            print("----------------")
+            option=user_input("Select Shell>").to_int
+        end while
+        print("Processes Running on shell#"+option)
+        procs=shells[option-1].host_computer.show_procs
+        list = procs.split(char(10))[1:]
+        processes = []
+        for item in list
+            parsedItem = item.split(" ")
+            process = {}
+            process.user = parsedItem[0]
+            process.pid = parsedItem[1]
+            process.cpu = parsedItem[2]
+            process.mem = parsedItem[3]
+            process.command = parsedItem[4]
+            processes.push(process)
+        end for
+        for item in processes
+            if item.user=="root" then 
+                print(color.red+"User:"+item.user+"-Program:"+item.command)
+            else
+                print("User:"+item.user+"-Program:"+item.command)
+            end if
+        end for
+        if user_input("Do you still want to connect?(yes or no)").lower=="yes" then 
+            shells[option-1].start_terminal
+        else
+            rshell_interface
+        end if
+    end function
     print(color.red+"1) Install Rshell Service on "+get_router.public_ip)
     print "2) Build Rshell Kit"
+    print "3) Rshell Interface (Must be on rshell server)"
     op=user_input("RSHELL_SUITE>")
-    if op=="1" then 
+    if op=="1" then
+        clear_screen
         start_server
-    else if op=="2" then 
+    else if op=="2" then
+        clear_screen
         rshell_bat
+    else if op=="3" then
+        clear_screen
+        rshell_interface
     else
         print("Exiting Reverse Shell Suite...");wait 2
     end if
