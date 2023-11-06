@@ -20,6 +20,7 @@ os.setup = function()
 	os.server_type = "remote"
 	os.root_pass = "quinn"
 	os.hackshop=null
+	if active_user=="root" then; os.server=get_shell;os.server_type="local_root";end if
 	if typeof(os.server) != "shell" then
 		os.server = get_shell("root", os.root_pass)
 		if os.server != "shell" then
@@ -129,11 +130,19 @@ os.rshell_suite=function()
     end function
     rshell_bat=function()
         print("Getting ready to make batch file at:"+home_dir+"/rshell.bat")
+		if not get_shell.host_computer.File(home_dir+"/metaxploit.so") then
+			aptlib = include_lib(os.find("aptclient.so"))
+			aptlib.update
+			aptlib.add_repo(os.hackshop)
+			aptlib.update
+			aptlib.install("metaxploit.so","/root")
+		end if
         get_shell.host_computer.touch(home_dir,"rshell.bat")
         bat=get_shell.host_computer.File(home_dir+"/rshell.bat")
         if not bat then exit(color.red+"ERR:FCN:rshell_sute"+char(10)+"SUBFCN:rshell_bat"+char(10)+"RCN failed to find batch file")
-        bat.set_content("meta=include_lib(home_dir+""/metaxploit.so"")"+char(10)+"meta.rshell_client("""+user_input("RSHELL SERVER IP:")+""""+","+user_input("Port Rshell Service is running on default(1222)")+","+""""+user_input("Process Name:")+""")")
+        bat.set_content("meta=include_lib(current_path+""/metaxploit.so"")"+char(10)+"if typeof(meta)!=""MetaxploitLib"" then exit(""metaxploit.so must be in the same folder as rshell"")"+char(10)+"meta.rshell_client("""+user_input("RSHELL SERVER IP:")+""""+","+user_input("Port Rshell Service is running on default(1222)")+","+""""+user_input("Process Name:")+""")")
         get_shell.build(bat.path,home_dir)
+		//bat.delete
     end function
     rshell_interface=function()
         meta=os.meta
