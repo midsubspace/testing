@@ -135,7 +135,8 @@ os.rshell_suite=function()
 			aptlib.update
 			aptlib.add_repo(os.hackshop)
 			aptlib.update
-			aptlib.install("metaxploit.so","/root")
+			path=current_path
+			aptlib.install("metaxploit.so",path)
 		end if
         get_shell.host_computer.touch(home_dir,"rshell.bat")
         bat=get_shell.host_computer.File(home_dir+"/rshell.bat")
