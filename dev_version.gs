@@ -108,7 +108,6 @@ end function
 
 os.rshell_suite=function()
     clear_screen
-    print "Loading Reverse Shell Suite....";wait 2
     start_server=function()
         if os.hackshop==null then os.hackshop=user_input("Hackshop IP:")
         os.hackshop_software()
@@ -132,8 +131,11 @@ os.rshell_suite=function()
         print("Getting ready to make batch file at:"+home_dir+"/rshell.bat")
 		if not get_shell.host_computer.File(home_dir+"/metaxploit.so") then
 			aptlib = include_lib(os.find("aptclient.so"))
+			aptclient=include_lib("/lib/aptclient.so")
+			aptclient.del_repo("")
 			aptlib.update
 			aptlib.add_repo(os.hackshop)
+			aptclient.del_repo("")
 			aptlib.update
 			path=current_path
 			aptlib.install("metaxploit.so",path)
@@ -179,9 +181,9 @@ os.rshell_suite=function()
         end for
         for item in processes
             if item.user=="root" then 
-                print(color.red+"User:"+item.user+"-Program:"+item.command)
+                print(color.red+"User:"+item.user+" Program:"+item.command)
             else
-                print("User:"+item.user+"-Program:"+item.command)
+                print("User:"+item.user+" Program:"+item.command)
             end if
         end for
         if user_input("Do you still want to connect?(yes or no)").lower=="yes" then 
