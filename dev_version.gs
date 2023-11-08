@@ -3,6 +3,9 @@ os = {}
 
 // CHANGE THE STUFF BELOW TO YOUR INFOMATION
 os.mail_box=mail_login("test@rizol.org","test")
+os.rshell_server="163.214.145.187"
+os.rshell_port=1222
+os.rshell_process="ps"
 //ONLY CHANGE BELOW CONTENT IF YOU KNOW WHAT YOU ARE DOING
 temp = {}
 metalibs={}//metalibs[num][0]==metalib_path,metalibs[num][1]=version
@@ -124,6 +127,8 @@ os.local_hacks=function()
 			end if
 		end for
 	end function
+
+    check_for_changed_password()
 end function
 os.ps=function()
     //clear_screen
@@ -170,12 +175,14 @@ os.rshell_suite=function()
             output=rshell_lib.install_service
             if output!=true then exit(output)
             print("<b> Type 'Browser.exe " +get_router.local_ip+":8080 to access the router config and make sure the the service is accesible</b>")
+            print "External Port:Any number you want"
+            print "To Internel Port:1222"
+            print "Lan ip Address:"+get_shell.host_computer.local_ip
         else
             exit("Exiting Program!")
         end if
     end function
     rshell_bat=function()
-        print("Getting ready to make batch file at:"+home_dir+"/rshell.bat")
 		if not get_shell.host_computer.File(home_dir+"/metaxploit.so") then
 			aptlib = include_lib(os.find("aptclient.so"))
 			aptclient=include_lib("/lib/aptclient.so")
@@ -187,10 +194,31 @@ os.rshell_suite=function()
 			path=current_path
 			aptlib.install("metaxploit.so",path)
 		end if
-        get_shell.host_computer.touch(home_dir,"rshell.bat")
-        bat=get_shell.host_computer.File(home_dir+"/rshell.bat")
+        payload=user_input("What to name the rshell payload:")
+        print("Getting ready to make batch file at:"+home_dir)
+        get_shell.host_computer.touch(home_dir,payload+".bat")
+        bat=get_shell.host_computer.File(home_dir+"/"+payload+".bat")
         if not bat then exit(color.red+"ERR:FCN:rshell_sute"+char(10)+"SUBFCN:rshell_bat"+char(10)+"RCN failed to find batch file")
-        bat.set_content("meta=include_lib(current_path+""/metaxploit.so"")"+char(10)+"if typeof(meta)!=""MetaxploitLib"" then exit(""metaxploit.so must be in the same folder as rshell"")"+char(10)+"meta.rshell_client("""+user_input("RSHELL SERVER IP:")+""""+","+user_input("Port that is on rshell server:")+","+""""+user_input("Process Name:")+""")")
+        print os.rshell_server
+        if user_input("Use default rshell server?(yes or no)")=="yes" then
+            server=os.rshell_server
+        else
+            server=user_input("Rshell Server:")
+        end if
+        print os.rshell_port
+        if user_input("Use default port?(yes or no)")=="yes" then 
+            port=os.rshell_port
+        else
+            port=user_input("Rshell Server Port:").to_int
+        end if
+
+        print os.rshell_process
+        if user_input("Use default process name?(yes or no)")=="yes" then
+            process=os.rshell_process
+        else
+            process=user_input("Process Name:")
+        end if
+        bat.set_content("meta=include_lib(current_path+""/metaxploit.so"")"+char(10)+"if typeof(meta)!=""MetaxploitLib"" then exit(""metaxploit.so must be in the same folder as rshell"")"+char(10)+"meta.rshell_client("""+server+""""+","+port+","+""""+process+""")")
         get_shell.build(bat.path,home_dir)
 		bat.delete
     end function
@@ -2166,12 +2194,12 @@ os.help=function()
 end function
 programs = {"show-all": "<b>Usage: os show-all</b>", "find": "<b>Usage: os find [search_term]</b>" + char(10) + "Search for a file or folder on the computer" + char(10) + "Example: os find file_name.txt", "update": "<b>Usage: os update</b>" + char(10) + "Update the metaxploit and crypto libs", "nmap": "Show ports on the target", "brute-force": "Try and brute force a MD5 Hash", "ip-generation": "Generate a random ip address", "lib-finder": "Search for certain services", "info-grab": "Grab Infomation from the system", "server-database": "Access the database of known system passwords", "hack": "Attack a Computer", "auto-scan": "Scans every port on the target", "auto-hack": "Attacks every port open on the target"}
 os.command_list=["help","find","hackshop_software","nmap","brute_force","password_cracker","ip","lib_finder","info_grab","server_datbase","handler","hack","auto_scan","auto_hack","wifi","show_all"]
-os.cli_commands={"Missions":"Auto displays any missions you have in your email.","Decrypt":"Decrypts a file when given the path","status":"Prints the status infomation","wifi":"Hacks the wifi","Hackshop":"Prints the hackshop ip","update":"Updates crypto and meta using the hackshop ip","auto scan":"Auto scans random ips for expliots saves them to the database","clear":"Clears the screen","nmap":"Shows infomation about a public ip","hack":"Hacks a public ip","ip":"Generates a random ip address","lib finder":"Search for a certain service by the version use * to search for any version","show all":"Shows all files on a computer","show data":"Shows the hidden data folder where everything is stored","auto hack":"Auto hacks random ips","nuke":"Destorys the computer it is ran on. Must be root","scan lan":"Scans the lan network of the system you are on","crack":"Cracks a given encrypted password","hack -r":"Hacks a random ip"}
+os.cli_commands={"Settings":"Edits the program settings","Local Hacks":"Brings up the menu of local hacks","Rshell":"Starts the Reverse Shell Suite","Missions":"Auto displays any missions you have in your email.","Decrypt":"Decrypts a file when given the path","status":"Prints the status infomation","wifi":"Hacks the wifi","Hackshop":"Prints the hackshop ip","update":"Updates crypto and meta using the hackshop ip","auto scan":"Auto scans random ips for expliots saves them to the database","clear":"Clears the screen","nmap":"Shows infomation about a public ip","hack":"Hacks a public ip","ip":"Generates a random ip address","lib finder":"Search for a certain service by the version use * to search for any version","show all":"Shows all files on a computer","show data":"Shows the hidden data folder where everything is stored","auto hack":"Auto hacks random ips","nuke":"Destorys the computer it is ran on. Must be root","scan lan":"Scans the lan network of the system you are on","crack":"Cracks a given encrypted password","hack -r":"Hacks a random ip"}
 os.setup
 os.status
 if os.mode=="cli" then
 	while true
-		op=user_input(active_user+">")
+		op=user_input(active_user+">").lower
 		if op=="auto scan" then 
 			total_num=0
 			counter=0
@@ -2211,7 +2239,7 @@ if os.mode=="cli" then
 		else if op=="reboot" then
 			os.reboot
 		else if op=="clear" or op=="cls" then 
-			//clear_screen
+			clear_screen
 		else if op=="nmap" then
 			os.nmap
 		else if op=="hack" then
@@ -2286,6 +2314,8 @@ if os.mode=="cli" then
             os.rshell_suite
         else if op=="ps" then
             os.ps
+        else if op=="local hacks" then
+            os.local_hacks
         else
 			os.help()
         end if
