@@ -752,7 +752,7 @@ os.nmap = function(ip)
 		print("ESSID: " + router.essid_name + " (" + router.bssid_name + ")")
 		print("Public IP: <b>" + router.public_ip + "</b> Private IP: <b>" + router.local_ip + "</b>")
 		print(whois(router.public_ip))
-	
+		print("Kernel_Router.so Version:" +router.kernel_version)
 		for port in ports
 			known_exploits = "none"
 			service = router.port_info(port)
