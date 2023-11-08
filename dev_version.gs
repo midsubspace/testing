@@ -126,7 +126,7 @@ os.local_hacks=function()
 	end function
 end function
 os.ps=function()
-    clear_screen
+    //clear_screen
     computer=get_shell.host_computer
     list = computer.show_procs.split(char(10))
     process_list = []
@@ -153,12 +153,13 @@ os.ps=function()
     print format_columns(data)
 end function
 os.rshell_suite=function()
-    clear_screen
+    print(color.yellow+"RUNNING OS.RSHELL_SUITE FCN")
+    //clear_screen
     start_server=function()
         if os.hackshop==null then os.hackshop=user_input("Hackshop IP:")
         os.hackshop_software()
         if active_user!="root" then exit("Only"+color.red+" Root"+color.cap+" Can Start An Rshell Service!")
-        clear_screen
+        //clear_screen
         rshell_lib=null
         if rshell_lib == null and os.find("librshell",1)==true then
             rshell_lib = include_lib(os.find("librshell",0))
@@ -244,18 +245,19 @@ os.rshell_suite=function()
 	print "4) Exit Rshell Program"
     op=user_input("RSHELL_SUITE>")
     if op=="1" then
-        clear_screen
+        //clear_screen
         start_server
     else if op=="2" then
         rshell_bat
     else if op=="3" then
-        clear_screen
+        //clear_screen
         rshell_interface
     else
         print("Exiting Reverse Shell Suite...");wait 2;return ""
     end if
 end function
 os.edit_settings=function()
+    print(color.yellow+"RUNNING OS.EDIT_SETTINGS FCN")
 	setting_folder=os.settings_folder
 	count=0
 	settings=[]
@@ -274,6 +276,7 @@ os.edit_settings=function()
 	exit("Program Was Shutdown For Setting Changes To Take Affect!")
 end function
 os.mission_finder=function()
+    print(color.yellow+"RUNNING OS.MISSION_FINDER FCN")
     mission_parser=function(mission,mode)
         lines=mission.split(char(10))
         //get_shell.host_computer.File(home_dir+"/email").set_content(lines)
@@ -379,7 +382,7 @@ os.mission_finder=function()
     end function
         //mail_box=mail_login(user_input("Email Address:"),user_input("Password:",true))
         mail_box=os.mail_box
-        while typeof(mail_box)!="MetaMail";clear_screen;print("Either username/password is incorrect");mail_box=mail_login(user_input("Email Address:"),user_input("Password:",true));yield;end while
+        while typeof(mail_box)!="MetaMail";print("Either username/password is incorrect");mail_box=mail_login(user_input("Email Address:"),user_input("Password:",true));yield;end while
         emails=mail_box.fetch
         missions=[]
         num=0
@@ -414,10 +417,11 @@ os.mission_finder=function()
 		end for
 
 		mission_sel=user_input("Which Mission To Do?").to_int
-		clear_screen
+		//clear_screen
 		mission_parser(mail_box.read(missions[mission_sel].split(char(10))[2].split(":")[1].split(" ")[1]),"hack")
 end function
 os.decrypt_file=function()
+    print(color.yellow+"RUNNING OS.DECRYPT_FILE FCN")
 	crypto=os.crypto
 	if not crypto then exit("No Crypto.so")
 	computer=os.server.host_computer
@@ -454,6 +458,7 @@ os.decrypt_file=function()
 	print(file.get_content)
 end function
 os.find=function(term,mode)
+    print(color.yellow+"RUNNING OS.FIND FCN")
 	found_files=[]
 	found_folders=[]
 	search_files=function(folder,term)
@@ -587,6 +592,7 @@ os.find=function(term,mode)
 end function
 
 os.hackshop_software = function()
+    print(color.yellow+"RUNNING OS.HACKSHOP_SOFTWARE FCN")
 	if os.hackshop == "" then
 		os.hackshop = user_input("HackShop IP:")
 	end if
@@ -624,6 +630,7 @@ os.hackshop_software = function()
 end function
 
 os.nmap = function(ip)
+    print(color.yellow+"RUNNING OS.NMAP FCN")
 	if ip == null then
 		ip = user_input("IP Address:")
 	end if
@@ -796,7 +803,8 @@ os.nmap = function(ip)
 end function
 
 os.brute_force = function(password)
-	server = os.server
+    print(color.yellow+"RUNNING OS.BRUTE_FORCE FCN")
+    server = os.server
 	computer = server.host_computer
 	computer.create_folder(os.data_storage.path, "wordlists")
 	wordlist_folder = computer.File(os.data_storage.path + "/wordlists")
@@ -862,8 +870,8 @@ os.brute_force = function(password)
 end function
 
 os.password_cracker = function(origFile)
-	get_password = function(userpass)
-		
+    print(color.yellow+"RUNNING OS.PASSWORD_CRACKER FCN")
+    get_password = function(userpass)
 		if userpass.len != 2 then
 			exit("Decipher:" + origFile.path)
 		end if
@@ -893,7 +901,8 @@ os.password_cracker = function(origFile)
 end function
 
 os.ip = function()
-	computer = os.server.host_computer
+    print(color.yellow+"RUNNING OS.IP fcn")
+    computer = os.server.host_computer
 
 	ip_gen=function();return([floor(rnd * 255) + 1, floor(rnd * 255) + 1, floor(rnd * 255) + 1, floor(rnd * 255) + 1].join("."));end function
 	ip=ip_gen
@@ -911,7 +920,8 @@ os.ip = function()
 end function
 
 os.lib_finder = function()
-	counter = {"ips_checked": 0, "matches_found": 0}
+    print(color.yellow+"RUNNING OS.LIB_FINDER fcn")
+    counter = {"ips_checked": 0, "matches_found": 0}
 	matches = []
 
 	search = function(service, amount, ver)
@@ -985,7 +995,7 @@ os.lib_finder = function()
 	service = (services[(user_input("Service:").to_int) - 1])
 	ver = user_input("ver:")
 	search(service, user_input("Amount to find:"), ver)
-	clear_screen
+	//clear_screen
 	print("It took " + counter.ips_checked + " tries to find " + matches.len + " ips")
 	if os.bypass != 1 then
 		get_shell.host_computer.create_folder(os.data_storage_path, "servicefinder")
@@ -1017,6 +1027,7 @@ os.lib_finder = function()
 end function
 
 os.info_grab = function(obj, ip)
+    print(color.yellow+"RUNNING OS._INFO_GRAB fcn")
 	if obj and typeof(obj) == "shell" then
 		host = obj
 		device = host.host_computer
@@ -1343,7 +1354,6 @@ os.scanlan=function(ip)
 end function
 os.handler = function(result, ip)
 	print("<color=yellow>" + typeof(result))
-
 	if typeof(result) == "file" then
 		file = result
 		
@@ -1588,14 +1598,14 @@ os.hack = function(ip)
 		if port.port_number==target_port and port.is_closed==true and target_port!=0 then
 			print "Port:"+port.port_number+" Is Closed Pick Another!"
 			wait(3)
-			clear_screen
+			//clear_screen
 			os.hack(ip)
 		end if
 	end for
 	if port_nums.indexOf(target_port)==null and target_port!=0 then
 		print "Port:"+target_port+" Not Found"
 		wait(4)
-		clear_screen
+		//clear_screen
 		os.hack(ip)
 	end if
 	net_session = os.meta.net_use(ip, target_port)
@@ -1630,7 +1640,7 @@ os.hack = function(ip)
 		objtype = payload.split(":")[2]
 
 		if target_port == 0 then
-			clear_screen
+			//clear_screen
 			os.scanlan(ip)
 			result = Lib.overflow(memory, exploit, user_input("LAN IP:"))
 			if typeof(result) == "shell" then
@@ -2201,7 +2211,7 @@ if os.mode=="cli" then
 		else if op=="reboot" then
 			os.reboot
 		else if op=="clear" or op=="cls" then 
-			clear_screen
+			//clear_screen
 		else if op=="nmap" then
 			os.nmap
 		else if op=="hack" then
@@ -2407,7 +2417,7 @@ else
 	else if params[0] == "show-all" then
 		os.show_all
 	else if params[0] == "man" and params.len > 1 then
-		clear_screen
+		//clear_screen
 		print(params[1] + char(10) + programs[params[1]])
 	else if params[0]=="show-data" then 
 		os.show_data
