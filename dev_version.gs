@@ -1017,7 +1017,11 @@ os.lib_finder = function()
 	services = ["http", "ftp", "ssh", "smtp", "repository", "employees", "students", "criminals", "router","rshell"]
 	num = 1
 	for service in services
-		print(num + ")" + service)
+		if service=="rshell" then 
+			print(num + ")" + service+color.red+" WARNING THIS MAY TAKE HOURS")
+		else
+			print(num + ")" + service)
+		end if
 		num = num + 1
 	end for
 	service = (services[(user_input("Service:").to_int) - 1])
