@@ -1014,7 +1014,7 @@ os.lib_finder = function()
 		end while
 	end function
 
-	services = ["http", "ftp", "ssh", "smtp", "repository", "employees", "students", "criminals", "router"]
+	services = ["http", "ftp", "ssh", "smtp", "repository", "employees", "students", "criminals", "router","rshell"]
 	num = 1
 	for service in services
 		print(num + ")" + service)
