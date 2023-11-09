@@ -106,7 +106,24 @@ os.status = function()
 end function
 
 //programs
-
+os.lib_check=function(folder)
+	meta=os.meta
+	lib_names=["init.so","kernel_module.so","net.so","aptclient.so","libhttp.so","libsmtp.so","libsql.so","libftp.so","libssh.so","libftp.so","crypto.so","metaxploit.so","aptclient.so","net.so","init.so","librshell.so"]
+	hidden_libs=[".init.so",".kernel_module.so",".net.so",".aptclient.so",".libhttp.so",".libsmtp.so",".libsql.so",".libftp.so",".libssh.so",".libftp.so",".crypto.so",".metaxploit.so",".aptclient.so",".net.so",".init.so",".librshell.so"]
+	for file in folder.get_files
+		if lib_names.indexOf(file.name)!=null then
+			print(file.path+":"+meta.load(file.path).version)
+		end if
+	end for
+	for file in folder.get_files
+		if hidden_libs.indexOf(file.name)!=null then
+			print("<color=red>"+file.path+":"+meta.load(file.path).version)
+		end if
+	end for
+    for folder2 in folder.get_folders
+        if folder.has_permission("r") then os.lib_check(folder2)
+    end for
+end function
 os.local_hacks=function()
 	check_for_changed_password=function()
 		users=["root"]
@@ -2320,6 +2337,8 @@ if os.mode=="cli" then
             os.ps
         else if op=="local hacks" then
             os.local_hacks
+		else if op=="libs" then
+			os.lib_check(get_shell.host_computer.File("/"))
         else
 			os.help()
         end if
@@ -2465,5 +2484,7 @@ else
 		if typeof(sshell)!="shell" then print("Error with ssh program BAD INPUT. TRY AGAIN")
     else if params[0]=="rshell" then
         os.rshell_suite
-    end if
+	else if params[0]=="libs" then
+		os.lib_check(get_shell.host_computer.File("/"))
+	end if
 end if
