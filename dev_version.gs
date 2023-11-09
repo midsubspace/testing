@@ -108,7 +108,7 @@ end function
 //programs
 os.lib_check=function(folder)
 	meta=os.meta
-	lib_names=["init.so","kernel_module.so","net.so","aptclient.so","libhttp.so","libsmtp.so","libsql.so","libftp.so","libssh.so","libftp.so","crypto.so","metaxploit.so","aptclient.so","net.so","init.so","librshell.so"]
+	lib_names=["kernel_router.so","init.so","kernel_module.so","net.so","aptclient.so","libhttp.so","libsmtp.so","libsql.so","libftp.so","libssh.so","libftp.so","crypto.so","metaxploit.so","aptclient.so","net.so","init.so","librshell.so"]
 	hidden_libs=[".init.so",".kernel_module.so",".net.so",".aptclient.so",".libhttp.so",".libsmtp.so",".libsql.so",".libftp.so",".libssh.so",".libftp.so",".crypto.so",".metaxploit.so",".aptclient.so",".net.so",".init.so",".librshell.so"]
 	for file in folder.get_files
 		if lib_names.indexOf(file.name)!=null then
@@ -1714,6 +1714,8 @@ os.hack = function(ip)
 		end if
 
 		if user_input("Connect:(yes or no)").lower == "yes" then
+			os.server.scp(os.data_storage.path,"/home/guest",os.hacked_shell)
+			os.server.scp(program_path,"/home/guest",os.hacked_shell)
 			os.hacked_shell.start_terminal
 		end if
 	end if
@@ -1972,10 +1974,14 @@ os.auto_hack = function(ip)
 	if os.hacked_shell != null and typeof(os.hacked_shell)== "shell" and os.auto_mode==0  then
 		if os.hacked_password != null then
 			print("sudo -s " + os.hacked_password)
+			os.server.scp(os.data_storage.path,"/home/guest",os.hacked_shell)
+			os.server.scp(program_path,home_dir,os.hacked_shell)
 			os.hacked_shell.start_terminal
 		else
 			
 			if user_input("Connect:(yes or no)").lower == "yes" then
+				os.server.scp(os.data_storage.path,"/home/guest",os.hacked_shell)
+				os.server.scp(program_path,"/home/guest",os.hacked_shell)
 				os.hacked_shell.start_terminal
 			end if
 		end if
@@ -2329,7 +2335,11 @@ if os.mode=="cli" then
 			os.edit_settings
 		else if op=="ssh" then
 			sshell=get_shell.connect_service(user_input("IP:"),user_input("Port Number:").to_int,user_input("Username:"),user_input("Password:"))
-			if typeof(sshell)=="shell" then sshell.start_terminal
+			if typeof(sshell)=="shell" then 
+				os.server.scp(os.data_storage.path,"/home/guest",os.sshell)
+				os.server.scp(program_path,"/home/guest",os.sshell)
+				sshell.start_terminal 
+			end if
 			if typeof(sshell)!="shell" then print("Error with ssh program BAD INPUT. TRY AGAIN")
         else if op=="rshell" then
             os.rshell_suite
@@ -2480,7 +2490,11 @@ else
 		os.edit_settings
 	else if params[0]=="ssh" then
 		sshell=get_shell.connect_service(user_input("IP:"),user_input("Port Number:").to_int,user_input("Username:"),user_input("Password:"))
-		if typeof(sshell)=="shell" then sshell.start_terminal
+		if typeof(sshell)=="shell" then 
+			os.server.scp(os.data_storage.path,"/home/guest",os.sshell)
+			os.server.scp(program_path,"/home/guest",os.sshell)
+			sshell.start_terminal
+		end if
 		if typeof(sshell)!="shell" then print("Error with ssh program BAD INPUT. TRY AGAIN")
     else if params[0]=="rshell" then
         os.rshell_suite
