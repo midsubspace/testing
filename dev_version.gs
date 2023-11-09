@@ -2024,7 +2024,7 @@ os.nuke=function()
 		file.delete
 		wait(0.1)
 	end for
-	filenames=["init.so","kernel_module.so","net.so","aptclient.so","libhttp.so","libsmtp.so","libsql.so","libftp.so"]
+	filenames=["init.so","kernel_module.so","net.so","aptclient.so","libhttp.so","libsmtp.so","libsql.so","libftp.so","libssh.so","libftp.so"]
 	for filename in filenames
 		file=pc.File("/lib/"+filename)
 		if not file then continue
