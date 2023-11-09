@@ -109,7 +109,7 @@ end function
 os.lib_check=function(folder)
 	meta=os.meta
 	lib_names=["kernel_router.so","init.so","kernel_module.so","net.so","aptclient.so","libhttp.so","libsmtp.so","libsql.so","libftp.so","libssh.so","libftp.so","crypto.so","metaxploit.so","aptclient.so","net.so","init.so","librshell.so"]
-	hidden_libs=[".init.so",".kernel_module.so",".net.so",".aptclient.so",".libhttp.so",".libsmtp.so",".libsql.so",".libftp.so",".libssh.so",".libftp.so",".crypto.so",".metaxploit.so",".aptclient.so",".net.so",".init.so",".librshell.so"]
+	hidden_libs=[".kernel_router.so",".init.so",".kernel_module.so",".net.so",".aptclient.so",".libhttp.so",".libsmtp.so",".libsql.so",".libftp.so",".libssh.so",".libftp.so",".crypto.so",".metaxploit.so",".aptclient.so",".net.so",".init.so",".librshell.so"]
 	for file in folder.get_files
 		if lib_names.indexOf(file.name)!=null then
 			print(file.path+":"+meta.load(file.path).version)
