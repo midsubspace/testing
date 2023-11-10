@@ -128,6 +128,7 @@ os.local_hacks=function()
 	check_for_changed_password=function()
 		users=["root"]
 		crypto=os.crypto
+		if typeof(crypto)!="cryptoLib" then ;print("Crypto Lib Not Found On Computer!");return;end if
 		for folder in get_shell.host_computer.File("/home").get_folders
 			users.push(folder.name)
 		end for
