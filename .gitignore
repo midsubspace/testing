@@ -5,4 +5,5 @@ website_switcher.gs
 wipe.gs
 so_version.gs
 botnet.gs
+service_installer.gs
 .gitignore
