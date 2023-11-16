@@ -31,7 +31,7 @@ os.setup = function()
 			os.server_type = "local_root"
 		end if
 	end if
-	os.version = "Alpha 1.0"
+	os.version = "Testing Build 1.0"
 	os.user = active_user
 	os.shell = os.server
 	os.computer = os.server.host_computer
