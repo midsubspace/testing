@@ -2365,8 +2365,8 @@ else
 	else if params[0]=="ps" then
         os.ps
     else if params[0] == "find" then
-		if params.len > 2 then
-			os.find(params[1])
+		if params.len >= 2 then
+			print os.find(params[1])
 		else
 			exit("os [find / search_term]")
 		end if
