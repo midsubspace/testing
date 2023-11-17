@@ -617,6 +617,12 @@ os.find=function(term,mode)
 				num=num+1
 			end for
 			choice=user_input("Pick a folder location to use:").to_int
+			while choice>found_folders.len
+				choice=user_input("Pick a folder location to use:").to_int
+			end while
+			while choice<found_folders.len
+				choice=user_input("Pick a folder location to use:").to_int
+			end while
 			return(found_folders[choice-1])
 		else
 			return(found_folders[0])
