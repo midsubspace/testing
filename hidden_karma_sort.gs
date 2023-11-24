@@ -46,7 +46,7 @@ search=function()
             end if
         end if
     end for
-    print("Logs:")
+    if logs.len!=0 then print("Logs:")
     for file in logs
         if file.has_permission("r") then
             print color.green+"LogViewer.exe "+file.path
@@ -54,7 +54,7 @@ search=function()
             print color.red+"LogViewer.exe "+file.path
         end if
     end for
-    print(char(10)+"Pictures:")
+    if jpgs.len!=0 then print(char(10)+"Pictures:")
     for file in jpgs
         if file.has_permission("r") then
             print color.green+"ImageViewer.exe "+file.path
