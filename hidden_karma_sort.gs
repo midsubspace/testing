@@ -1,5 +1,6 @@
     os={}
     color = {};color.white = "<color=#FFFFFF>";color.grey = "<color=#A5A5A5>";color.blue = "<color=#003AFF>";color.cyan = "<color=#00FFE7>";color.purple = "<color=#D700FF>";color.red = "<color=#AA0000>";color.yellow = "<color=#FBFF00>";color.orange = "<color=#FF8701>";color.green = "<color=#00ED03>";color.fill = "><> ><> ><> ><> ><> ><> ><> ><> ><> ><> ><> ><>";color.cap = "</color>";title = "<color=#00FFE7>[<b>SeaShell</b>]</color> ";init = "<color=#00ED03>[SeaShell] <b>init:</b></color> ";error = "<color=#AA0000>[SeaShell] <b>Error:</b></color> ";warning = "<color=#FF8701>[SeaShell] <b>Warning:</b></color> ";color.rainbow = color.red+"R"+color.cap+color.orange+"A"+color.cap+color.cap+color.yellow+"I"+color.cap+color.cap+color.green+"N"+color.cap+color.cap+color.cyan+"B"+color.cap+color.cap+color.blue+"O"+color.cap+color.cap+color.purple+"W"+color.cap;
+pink_panther=function()
     shell=get_shell
     computer=shell.host_computer
     exts=["log","jpg","pdf","chat","bin"]
@@ -7,7 +8,6 @@
     os.files=[]
     os.folders=[]
     current_folder=current_path
-
     check = function(folder)
         folders = folder.get_folders
         files = folder.get_files
@@ -20,8 +20,6 @@
             os.folders.push(folder)
         end for
     end function
-
-
     search=function()
         files=[]
         jpgs=[]
@@ -72,7 +70,6 @@
             end if
         end for
     end function
-
     show_folders = function(f)
         for folder in f.get_folders
             res = show_folders(folder)
@@ -86,3 +83,4 @@
     end function
     show_folders(get_shell.host_computer.File("/"))
     search()
+end function
