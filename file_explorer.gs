@@ -16,7 +16,7 @@ end function
 
 display_list=function(current_path)
     print("Current Path:"+current_path.path)
-    data="Name"+" "+"Owner"+ " "+"Permissions"
+    data="Name"+" "+"Owner"+ " "+"Permissions"+" Type"
     for file in current_path.get_files
         files.push(file)
     end for
@@ -27,13 +27,18 @@ display_list=function(current_path)
         name=file.name
         owner=file.owner
         perms=check_perms(file)
-        data = data + char(10) + name+" "+owner+" "+perms
+        if file.is_binary==1 then
+            type="Binary"
+        else
+            type="File"
+        end if
+        data = data + char(10) + name+" "+owner+" "+perms+" "+type
     end for
     for folder in folders
         name=folder.name
         owner=folder.owner
         perms=check_perms(folder)
-        data = data + char(10) + name+" "+owner+" "+perms
+        data = data + char(10) + name+" "+owner+" "+perms+" Folder"
     end for
     print char(10)+format_columns(data)
 end function
@@ -41,37 +46,51 @@ end function
 menu=function(options,current_path)
     clear_screen
     n=0
-    display_list(current_path)
     for option in options
         print n+")"+option
     end for
 end function
-options=["cd"]
 while true
-    menu(options,current_path)
-    action=user_input("ACTION>").val
-    if options[action]=="cd" then
-        full=1
-        new_place=user_input("Name of folder to enter>")
+    clear_screen
+    files=[]
+    folders=[]
+    display_list(current_path)
+    object=user_input("FILE>")
+    found=0
+    while found==0
+        if object==".." then found=1
         for folder in folders
-            if folder.name==new_place then
-                current_path=computer.File(folder.path)
-                full=0
+            if folder.name==object then
+                object=computer.File(folder.path)
+                found=1
                 break
             end if
         end for
-        if full==1 and new_place==".." then
-            list=current_path.path.split("/")
-            if list.len==2 then 
-                current_path=computer.File("/")
-            else
-                list.pop
-                current_path=computer.File(list.join("/"))
+        for file in files
+            if file.name==object then
+                object=computer.File(file.path)
+                found=1
+                break
             end if
+        end for
+    end while
+    if object==".." then
+        list=current_path.path.split("/")
+        if list.len==2 then 
+            current_path=computer.File("/")
+            continue
         else
-            current_path=computer.File(new_place)
+            list.pop
+            current_path=computer.File(list.join("/"))
+            continue
         end if
-        files=[]
-        folders=[]
+    end if
+    action=user_input("ACTION>")
+    if object.is_folder==false and action=="read" then
+        user_input(file.get_content,0,1)
+    end if
+    if object.is_folder==true and action=="enter" then
+        current_path=computer.File(object.path)
+        continue
     end if
 end while
