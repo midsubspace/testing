@@ -60,7 +60,6 @@ while true
                 break
             end if
         end for
-        if full==1 and new_place!=".." then current_path=computer.File(new_place)
         if full==1 and new_place==".." then
             list=current_path.path.split("/")
             if list.len==2 then 
@@ -69,6 +68,8 @@ while true
                 list.pop
                 current_path=computer.File(list.join("/"))
             end if
+        else
+            current_path=computer.File(new_place)
         end if
         files=[]
         folders=[]
