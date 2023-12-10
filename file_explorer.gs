@@ -1,6 +1,6 @@
 shell=get_shell
 computer=shell.host_computer
-current_path=computer.File("/home/quinn")
+current_folder=computer.File(current_path)
 files=[]
 folders=[]
 check_perms=function(file)
@@ -14,13 +14,13 @@ check_perms=function(file)
 end function
 
 
-display_list=function(current_path)
-    print("Current Path:"+current_path.path)
+display_list=function(current_folder)
+    print("Current Path:"+current_folder.path)
     data="Name"+" "+"Owner"+ " "+"Permissions"+" Type"
-    for file in current_path.get_files
+    for file in current_folder.get_files
         files.push(file)
     end for
-    for folder in current_path.get_folders
+    for folder in current_folder.get_folders
         folders.push(folder)
     end for
     for file in files
@@ -43,18 +43,54 @@ display_list=function(current_path)
     print char(10)+format_columns(data)
 end function
 
-menu=function(options,current_path)
-    clear_screen
+menu=function(options)
     n=0
     for option in options
         print n+")"+option
+        n=n+1
     end for
 end function
+file_actions=function(file)
+    clear_screen
+    print "TARGETING:"+file.path
+    options=["read"]
+    menu(options)
+    action=user_input("ACTION>")
+    if action.val==0 or action=="read" then 
+        user_input(file.get_content)
+    end if
+end function
+
+folder_actions=function(folder)
+    clear_screen
+    options=["enter"]
+    print "TARGETING:"+folder.path
+    menu(options)
+    action=user_input("ACTION>")
+    if action.val==0 or action=="enter" then
+        return computer.File(folder.path)
+    end if
+end function
+
+creation_actions=function(object,current_folder)
+    print("You Are IN:"+current_folder.path)
+    options=["Create Folder","Create File"]
+    menu(options)
+    action=user_input("ACTION>")
+    if action.val==0 or action=="create folder" then
+        computer.create_folder(current_folder.path,object)
+        return
+    else
+        computer.touch(current_folder.path,object)
+        return
+    end if
+end function
+
 while true
     clear_screen
     files=[]
     folders=[]
-    display_list(current_path)
+    display_list(current_folder)
     object=user_input("FILE>")
     found=0
     while found==0
@@ -73,24 +109,28 @@ while true
                 break
             end if
         end for
+        if found==0 then
+            creation_actions(object,current_folder)
+            clear_screen
+            shell.launch(program_path)
+        end if
     end while
     if object==".." then
-        list=current_path.path.split("/")
+        list=current_folder.path.split("/")
         if list.len==2 then 
-            current_path=computer.File("/")
+            current_folder=computer.File("/")
             continue
         else
             list.pop
-            current_path=computer.File(list.join("/"))
+            current_folder=computer.File(list.join("/"))
             continue
         end if
     end if
-    action=user_input("ACTION>")
-    if object.is_folder==false and action=="read" then
-        user_input(file.get_content,0,1)
+    if object.is_folder==false then
+        file_actions(object)
     end if
-    if object.is_folder==true and action=="enter" then
-        current_path=computer.File(object.path)
+    if object.is_folder==true then
+        current_folder=folder_actions(object)
         continue
     end if
 end while
