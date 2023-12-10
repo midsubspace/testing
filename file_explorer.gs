@@ -73,14 +73,18 @@ folder_actions=function(folder)
 end function
 
 creation_actions=function(object,current_folder)
-    print("You Are IN:"+current_folder.path)
+    print("You Are In:"+current_folder.path)
     options=["Create Folder","Create File"]
     menu(options)
     action=user_input("ACTION>")
     if action.val==0 or action=="create folder" then
+        print "You are creating a folder called "+object + " at "+current_folder.path
+        wait 3
         computer.create_folder(current_folder.path,object)
         return
     else
+        print "You are creating a file called "+object + " at "+current_folder.path
+        wait 3
         computer.touch(current_folder.path,object)
         return
     end if
