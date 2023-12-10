@@ -57,6 +57,7 @@ file_actions=function(file)
     if file.has_permission("w") then
         options.push("read")
         options.push("delete")
+        options.push("rename")
     else if file.has_permission("r") then
         options.push("read")
     end if
@@ -66,6 +67,8 @@ file_actions=function(file)
         user_input(file.get_content)
     else if options[action.val]=="delete" or action=="delete" then
         file.delete
+    else if options[action.val]=="rename" or acton=="rename" then
+        file.rename(user_input("New Name:"))
     end if
 end function
 
@@ -74,14 +77,18 @@ folder_actions=function(folder)
     options=[]
     if folder.has_permission("w") then
         options.push("enter")
+        options.push("rename")
     else if folder.has_permission("r") then
-        opstions.push("enter")
+        options.push("enter")
     end if
     print "TARGETING:"+folder.path
     menu(options)
     action=user_input("ACTION>")
-    if action.val==0 or action=="enter" then
+    if options[action.val]=="enter" or action=="enter" then
         return computer.File(folder.path)
+    else if options[action.val]=="rename" or action=="rename" then
+        folder.rename(user_input("New Name:"))
+        return computer.File(current_path)
     end if
 end function
 
