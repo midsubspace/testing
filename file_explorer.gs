@@ -53,11 +53,19 @@ end function
 file_actions=function(file)
     clear_screen
     print "TARGETING:"+file.path
-    options=["read"]
+    options=[]
+    if file.has_permission("w") then
+        options.push("read")
+        options.push("delete")
+    else if file.has_permission("r") then
+        options.push("read")
+    end if
     menu(options)
     action=user_input("ACTION>")
-    if action.val==0 or action=="read" then 
+    if options[action.val]=="read" or action=="read" then 
         user_input(file.get_content)
+    else if options[action.val]=="delete" or action=="delete" then
+        file.delete
     end if
 end function
 
@@ -96,6 +104,8 @@ while true
     folders=[]
     display_list(current_folder)
     object=user_input("FILE>")
+    if object=="quit" or object=="exit" then exit
+    if object=="reboot" then shell.launch(program_path)
     found=0
     while found==0
         if object==".." then found=1
