@@ -71,7 +71,12 @@ end function
 
 folder_actions=function(folder)
     clear_screen
-    options=["enter"]
+    options=[]
+    if folder.has_permission("w") then
+        options.push("enter")
+    else if folder.has_permission("r") then
+        opstions.push("enter")
+    end if
     print "TARGETING:"+folder.path
     menu(options)
     action=user_input("ACTION>")
