@@ -29,8 +29,22 @@ if computer.File("/home") and computer.File("/home").has_permission("w") then
         computer.create_folder("/home/"+name,"Desktop")
         computer.create_folder("/home/"+name,"Downloads")
         account_passwords.push(name+":"+md5(fake_user_passwords.pop))
+        yield
     end for
     for item in account_passwords
         computer.File("/etc/passwd").set_content(computer.File("/etc/passwd").get_content+item+char(10))
     end for
 end if
+
+for item in fake_user_passwords
+	get_shell.host_computer.change_password("guest",item)
+	yield
+end for
+for item in fake_mail_passwords
+	get_shell.host_computer.change_password("guest",item)
+	yield
+end for
+for item in fake_bank_passwords
+	get_shell.host_computer.change_password("guest",item)
+	yield
+end for
