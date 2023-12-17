@@ -36,15 +36,16 @@ if computer.File("/home") and computer.File("/home").has_permission("w") then
     end for
 end if
 
+computer.create_user("Kevin","test")
 for item in fake_user_passwords
-	get_shell.host_computer.change_password("guest",item)
+	computer.change_password("Kevin",item)
 	yield
 end for
 for item in fake_mail_passwords
-	get_shell.host_computer.change_password("guest",item)
+	computer.change_password("Kevin",item)
 	yield
 end for
 for item in fake_bank_passwords
-	get_shell.host_computer.change_password("guest",item)
+	computer.change_password("Kevin",item)
 	yield
 end for
