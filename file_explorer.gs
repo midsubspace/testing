@@ -4,13 +4,17 @@ current_folder=computer.File(current_path)
 files=[]
 folders=[]
 check_perms=function(file)
-    if file.has_permission("w") then return "WRX"
-    if file.has_permission("r") and file.has_permission("x") then 
+    if file.has_permission("w")==true then 
+        return "WRX"
+    else if file.has_permission("r")==true and file.has_permission("x")==true then 
         return "-RX"
-    else
+    else if file.has_permission("r")==true then
         return "-R-"
+    else if file.has_permission("x")==true then 
+        return "--X"
+    else
+        return "---"
     end if
-    if file.has_permission("x") then return "--X"
 end function
 
 
